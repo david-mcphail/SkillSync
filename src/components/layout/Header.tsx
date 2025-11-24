@@ -1,6 +1,5 @@
 import React from 'react';
-import { AppBar, Toolbar, Typography, Button, IconButton, useScrollTrigger, Slide, Box } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
+import { AppBar, Toolbar, Typography, Button, useScrollTrigger, Slide } from '@mui/material';
 
 interface HeaderProps {
     onDemoClick?: () => void;

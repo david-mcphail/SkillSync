@@ -4,9 +4,17 @@ import {
     Typography,
     Button,
     Grid,
-    CircularProgress
+    CircularProgress,
+    TextField,
+    MenuItem,
+    Select,
+    FormControl,
+    InputLabel,
+    Paper,
+    Divider,
+    InputAdornment
 } from '@mui/material';
-import { Add as AddIcon } from '@mui/icons-material';
+import { Add as AddIcon, Search as SearchIcon, FilterList as FilterIcon } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { mockService } from '../services/mockService';
 import type { Project, ProjectRole, ProjectAssignment } from '../types/models';
@@ -21,6 +29,8 @@ const ProjectsListPage: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [createModalOpen, setCreateModalOpen] = useState(false);
     const [editingProject, setEditingProject] = useState<Project | undefined>();
+    const [groupBy, setGroupBy] = useState<'none' | 'customer' | 'portfolio'>('none');
+    const [filterText, setFilterText] = useState('');
 
     useEffect(() => {
         loadData();
@@ -79,6 +89,30 @@ const ProjectsListPage: React.FC = () => {
         return { filledRoles, totalRoles };
     };
 
+    const getGroupedProjects = () => {
+        let filtered = projects;
+        if (filterText) {
+            const lower = filterText.toLowerCase();
+            filtered = projects.filter(p =>
+                p.name.toLowerCase().includes(lower) ||
+                p.clientName.toLowerCase().includes(lower) ||
+                p.projectCode.toLowerCase().includes(lower) ||
+                (p.portfolio && p.portfolio.toLowerCase().includes(lower))
+            );
+        }
+
+        if (groupBy === 'none') return { 'All Projects': filtered };
+
+        return filtered.reduce((groups, project) => {
+            const key = groupBy === 'customer' ? project.clientName : (project.portfolio || 'Unassigned');
+            if (!groups[key]) groups[key] = [];
+            groups[key].push(project);
+            return groups;
+        }, {} as Record<string, Project[]>);
+    };
+
+    const groupedProjects = getGroupedProjects();
+
     if (loading) {
         return (
             <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
@@ -102,32 +136,79 @@ const ProjectsListPage: React.FC = () => {
                 </Button>
             </Box>
 
-            <Grid container spacing={3}>
-                {projects.map((project) => {
-                    const stats = getProjectStats(project.id);
-                    return (
-                        <Grid 
-                            item 
-                            xs={12} 
-                            sm={6} 
-                            md={4} 
-                            key={project.id}
-                            sx={{ display: 'flex' }}
-                        >
-                            <ProjectCard
-                                project={project}
-                                filledRoles={stats.filledRoles}
-                                totalRoles={stats.totalRoles}
-                                onClick={() => navigate(`/projects/${project.id}`)}
-                                onEdit={() => {
-                                    setEditingProject(project);
-                                    setCreateModalOpen(true);
-                                }}
-                            />
-                        </Grid>
-                    );
-                })}
-            </Grid>
+            <Paper sx={{ p: 2, mb: 3 }}>
+                <Grid container spacing={2} alignItems="center">
+                    <Grid item xs={12} md={6}>
+                        <TextField
+                            fullWidth
+                            placeholder="Search projects..."
+                            value={filterText}
+                            onChange={(e) => setFilterText(e.target.value)}
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <SearchIcon color="action" />
+                                    </InputAdornment>
+                                ),
+                            }}
+                            size="small"
+                        />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', justifyContent: { md: 'flex-end' } }}>
+                            <FilterIcon color="action" />
+                            <FormControl size="small" sx={{ minWidth: 200 }}>
+                                <InputLabel>Group By</InputLabel>
+                                <Select
+                                    value={groupBy}
+                                    label="Group By"
+                                    onChange={(e) => setGroupBy(e.target.value as any)}
+                                >
+                                    <MenuItem value="none">None</MenuItem>
+                                    <MenuItem value="customer">Customer</MenuItem>
+                                    <MenuItem value="portfolio">Portfolio</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Box>
+                    </Grid>
+                </Grid>
+            </Paper>
+
+            {Object.entries(groupedProjects).map(([group, groupProjects]) => (
+                <Box key={group} sx={{ mb: 4 }}>
+                    {groupBy !== 'none' && (
+                        <Typography variant="h6" gutterBottom sx={{ mt: 2, mb: 2, borderBottom: 1, borderColor: 'divider', pb: 1 }}>
+                            {group} ({groupProjects.length})
+                        </Typography>
+                    )}
+                    <Grid container spacing={3}>
+                        {groupProjects.map((project) => {
+                            const stats = getProjectStats(project.id);
+                            return (
+                                <Grid
+                                    item
+                                    xs={12}
+                                    sm={6}
+                                    md={4}
+                                    key={project.id}
+                                    sx={{ display: 'flex' }}
+                                >
+                                    <ProjectCard
+                                        project={project}
+                                        filledRoles={stats.filledRoles}
+                                        totalRoles={stats.totalRoles}
+                                        onClick={() => navigate(`/projects/${project.id}`)}
+                                        onEdit={() => {
+                                            setEditingProject(project);
+                                            setCreateModalOpen(true);
+                                        }}
+                                    />
+                                </Grid>
+                            );
+                        })}
+                    </Grid>
+                </Box>
+            ))}
 
             {projects.length === 0 && (
                 <Box sx={{ textAlign: 'center', py: 8 }}>

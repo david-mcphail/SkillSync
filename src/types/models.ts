@@ -101,6 +101,7 @@ export interface Project {
     description: string;
     status: ProjectStatus;
     ownerId: string;
+    portfolio?: string;
 }
 
 export interface UserUtilization {
@@ -125,6 +126,132 @@ export interface SkillMatchResult {
     }[];
     missingSkills: SkillRequirement[];
     utilization: UserUtilization;
+}
+
+// Contract Management Types
+export type SOWStatus = 'Draft' | 'Under Review' | 'Approved' | 'Active' | 'Completed' | 'Cancelled';
+export type ChangeRequestStatus = 'Submitted' | 'Under Review' | 'Approved' | 'Rejected' | 'Implemented';
+export type ChangeRequestType = 'Scope Change' | 'Timeline Extension' | 'Budget Adjustment' | 'Resource Change' | 'Technical Change';
+
+export interface SOW {
+    id: string;
+    projectId: string;
+    title: string;
+    version: string;
+    status: SOWStatus;
+    startDate: string;
+    endDate: string;
+    totalValue: number;
+    currency: string;
+    scope: string;
+    deliverables: string[];
+    milestones: {
+        name: string;
+        dueDate: string;
+        payment: number;
+        completed: boolean;
+    }[];
+    createdDate: string;
+    approvedDate?: string;
+    approvedBy?: string;
+    documentUrl?: string;
+}
+
+export interface ChangeRequest {
+    id: string;
+    projectId: string;
+    sowId: string;
+    title: string;
+    type: ChangeRequestType;
+    status: ChangeRequestStatus;
+    description: string;
+    businessJustification: string;
+    impactAnalysis: {
+        scope?: string;
+        timeline?: string;
+        budget?: number;
+        resources?: string;
+    };
+    requestedBy: string;
+    requestedDate: string;
+    reviewedBy?: string;
+    reviewedDate?: string;
+    approvedBy?: string;
+    approvedDate?: string;
+    implementedDate?: string;
+    comments: {
+        author: string;
+        date: string;
+        text: string;
+    }[];
+}
+
+// Risk Management Types
+export type RiskStatus = 'Identified' | 'Analyzing' | 'Mitigating' | 'Monitoring' | 'Closed';
+export type RiskSeverity = 'Critical' | 'High' | 'Medium' | 'Low';
+export type RiskProbability = 'Very High' | 'High' | 'Medium' | 'Low' | 'Very Low';
+
+export interface Risk {
+    id: string;
+    projectId: string;
+    title: string;
+    description: string;
+    category: string;
+    severity: RiskSeverity;
+    probability: RiskProbability;
+    status: RiskStatus;
+    impact: string;
+    mitigationPlan: string;
+    contingencyPlan?: string;
+    owner: string;
+    identifiedDate: string;
+    targetResolutionDate?: string;
+    closedDate?: string;
+    lastUpdated: string;
+}
+
+// Dependency Management Types
+export type DependencyType = 'Internal' | 'External' | 'Technical' | 'Resource' | 'Vendor';
+export type DependencyStatus = 'Pending' | 'In Progress' | 'Blocked' | 'Resolved' | 'Cancelled';
+
+export interface Dependency {
+    id: string;
+    projectId: string;
+    title: string;
+    description: string;
+    type: DependencyType;
+    status: DependencyStatus;
+    dependsOn: string; // What this project depends on
+    dependentParty: string; // Who/what provides this dependency
+    requiredDate: string;
+    expectedDate?: string;
+    actualDate?: string;
+    impact: string; // Impact if not met
+    owner: string;
+    notes?: string;
+    createdDate: string;
+    lastUpdated: string;
+}
+
+// Supporting Documents Types
+export type DocumentType = 'Contract' | 'Proposal' | 'Specification' | 'Design' | 'Report' | 'Meeting Notes' | 'Other';
+export type DocumentStatus = 'Draft' | 'Under Review' | 'Approved' | 'Archived';
+
+export interface SupportingDocument {
+    id: string;
+    projectId: string;
+    title: string;
+    description?: string;
+    type: DocumentType;
+    status: DocumentStatus;
+    fileName: string;
+    fileSize: number; // in bytes
+    fileUrl: string;
+    uploadedBy: string;
+    uploadedDate: string;
+    version: string;
+    tags?: string[];
+    lastModified: string;
 }
 
 // Resource Management Types

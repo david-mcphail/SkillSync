@@ -11,6 +11,11 @@ import type {
     UserUtilization,
     SkillMatchResult,
     ProficiencyLevel,
+    SOW,
+    ChangeRequest,
+    Risk,
+    Dependency,
+    SupportingDocument,
     Group,
     UserGroup,
     Payband,
@@ -35,7 +40,8 @@ let projects: Project[] = [
         endDate: '2024-12-31',
         description: 'Complete overhaul of online banking platform with modern React frontend and microservices backend.',
         status: 'Active',
-        ownerId: '1'
+        ownerId: '1',
+        portfolio: 'Financial Services'
     },
     {
         id: 'proj-2',
@@ -46,7 +52,8 @@ let projects: Project[] = [
         endDate: '2024-09-30',
         description: 'Migration of legacy patient portal to cloud-native architecture with enhanced security.',
         status: 'Active',
-        ownerId: '1'
+        ownerId: '1',
+        portfolio: 'Healthcare'
     },
     {
         id: 'proj-3',
@@ -57,7 +64,8 @@ let projects: Project[] = [
         endDate: '2025-03-31',
         description: 'Build new e-commerce platform with AI-powered recommendations and real-time inventory.',
         status: 'Pipeline',
-        ownerId: '1'
+        ownerId: '1',
+        portfolio: 'Retail & Consumer'
     },
     {
         id: 'proj-4',
@@ -68,7 +76,8 @@ let projects: Project[] = [
         endDate: '2024-02-28',
         description: 'Automated claims processing system using machine learning and workflow automation.',
         status: 'Completed',
-        ownerId: '1'
+        ownerId: '1',
+        portfolio: 'Financial Services'
     }
 ];
 
@@ -154,6 +163,270 @@ let projectAssignments: ProjectAssignment[] = [
         notes: 'Part-time support for cloud migration'
     }
 ];
+
+// Initialize SOWs
+let sows: SOW[] = [
+    {
+        id: 'sow-1',
+        projectId: 'proj-1',
+        title: 'Digital Banking Platform Development - Phase 1',
+        version: '1.0',
+        status: 'Active',
+        startDate: '2024-01-15',
+        endDate: '2024-12-31',
+        totalValue: 850000,
+        currency: 'USD',
+        scope: 'Complete overhaul of online banking platform including React frontend, microservices backend, and cloud infrastructure setup.',
+        deliverables: [
+            'React-based customer portal',
+            'Microservices API layer',
+            'Cloud infrastructure on AWS',
+            'Security and compliance documentation',
+            'User training materials'
+        ],
+        milestones: [
+            { name: 'Requirements & Design', dueDate: '2024-03-15', payment: 170000, completed: true },
+            { name: 'Frontend Development', dueDate: '2024-06-30', payment: 255000, completed: true },
+            { name: 'Backend & Integration', dueDate: '2024-09-30', payment: 255000, completed: false },
+            { name: 'Testing & Deployment', dueDate: '2024-12-31', payment: 170000, completed: false }
+        ],
+        createdDate: '2023-12-01',
+        approvedDate: '2024-01-10',
+        approvedBy: 'John Smith - VP Technology'
+    }
+];
+
+// Initialize Change Requests
+let changeRequests: ChangeRequest[] = [
+    {
+        id: 'cr-1',
+        projectId: 'proj-1',
+        sowId: 'sow-1',
+        title: 'Add Mobile Banking Features',
+        type: 'Scope Change',
+        status: 'Approved',
+        description: 'Client requests addition of mobile banking features including biometric authentication and mobile check deposit.',
+        businessJustification: 'Market research shows 65% of customers prefer mobile banking. This feature will improve customer satisfaction and competitive positioning.',
+        impactAnalysis: {
+            scope: 'Additional 2 months of development for mobile features',
+            timeline: 'Project end date extended to Feb 28, 2025',
+            budget: 125000,
+            resources: 'Requires 1 additional mobile developer'
+        },
+        requestedBy: 'Sarah Johnson - Product Owner',
+        requestedDate: '2024-07-15',
+        reviewedBy: 'Jane Doe - Technical Lead',
+        reviewedDate: '2024-07-20',
+        approvedBy: 'John Smith - VP Technology',
+        approvedDate: '2024-07-25',
+        comments: [
+            {
+                author: 'Jane Doe',
+                date: '2024-07-20',
+                text: 'Technical feasibility confirmed. Recommend hiring specialist mobile developer.'
+            },
+            {
+                author: 'John Smith',
+                date: '2024-07-25',
+                text: 'Approved. Budget increase authorized. Please proceed with resource acquisition.'
+            }
+        ]
+    },
+    {
+        id: 'cr-2',
+        projectId: 'proj-1',
+        sowId: 'sow-1',
+        title: 'Timeline Extension for Security Audit',
+        type: 'Timeline Extension',
+        status: 'Under Review',
+        description: 'Request 3-week extension to complete comprehensive security audit as required by new regulatory guidelines.',
+        businessJustification: 'New PCI-DSS 4.0 requirements mandate additional security controls that were not in original scope.',
+        impactAnalysis: {
+            timeline: 'Extend final milestone by 3 weeks',
+            budget: 0,
+            resources: 'No additional resources required'
+        },
+        requestedBy: 'Mike Chen - Security Lead',
+        requestedDate: '2024-11-15',
+        comments: []
+    }
+];
+
+// Initialize Risks
+let risks: Risk[] = [
+    {
+        id: 'risk-1',
+        projectId: 'proj-1',
+        title: 'Third-party API Integration Delays',
+        description: 'Payment gateway provider has announced potential delays in API v3 release which our architecture depends on.',
+        category: 'Technical',
+        severity: 'High',
+        probability: 'Medium',
+        status: 'Mitigating',
+        impact: 'Could delay payment module delivery by 4-6 weeks, affecting Q1 2025 launch target.',
+        mitigationPlan: 'Develop adapter layer to support both API v2 and v3. Allocate additional developer to create fallback implementation.',
+        contingencyPlan: 'If API v3 is delayed beyond January 2025, proceed with v2 implementation and plan v3 migration for Q2.',
+        owner: 'Jane Doe',
+        identifiedDate: '2024-10-15',
+        targetResolutionDate: '2024-12-31',
+        lastUpdated: '2024-11-20'
+    },
+    {
+        id: 'risk-2',
+        projectId: 'proj-1',
+        title: 'Key Resource Availability',
+        description: 'Lead security architect has family medical situation and may need extended leave during critical security implementation phase.',
+        category: 'Resource',
+        severity: 'Critical',
+        probability: 'High',
+        status: 'Analyzing',
+        impact: 'Security implementation could be delayed or quality compromised without experienced leadership.',
+        mitigationPlan: 'Cross-train two senior developers on security architecture. Engage external security consultant as backup.',
+        contingencyPlan: 'Hire contract security architect with banking domain experience if leave extends beyond 2 weeks.',
+        owner: 'John Smith',
+        identifiedDate: '2024-11-18',
+        targetResolutionDate: '2024-12-01',
+        lastUpdated: '2024-11-22'
+    },
+    {
+        id: 'risk-3',
+        projectId: 'proj-1',
+        title: 'Regulatory Compliance Changes',
+        description: 'New PCI-DSS 4.0 requirements may necessitate additional security controls not in original scope.',
+        category: 'Compliance',
+        severity: 'Medium',
+        probability: 'Low',
+        status: 'Monitoring',
+        impact: 'May require additional security features, potentially adding $50K-$75K to budget and 2-3 weeks to timeline.',
+        mitigationPlan: 'Monitor PCI-DSS 4.0 finalization. Conduct gap analysis once requirements are published.',
+        owner: 'Mike Chen',
+        identifiedDate: '2024-09-20',
+        lastUpdated: '2024-11-15'
+    }
+];
+
+// Initialize Dependencies
+let dependencies: Dependency[] = [
+    {
+        id: 'dep-1',
+        projectId: 'proj-1',
+        title: 'Customer Data Migration from Legacy System',
+        description: 'Requires completion of data migration from legacy mainframe system before user authentication can be tested.',
+        type: 'Internal',
+        status: 'In Progress',
+        dependsOn: 'Legacy System Decommissioning Project',
+        dependentParty: 'Data Migration Team',
+        requiredDate: '2024-12-15',
+        expectedDate: '2024-12-20',
+        impact: 'Cannot complete UAT for authentication module without migrated customer data. Critical path item.',
+        owner: 'Sarah Johnson',
+        notes: 'Weekly sync meetings established. Migration is 60% complete as of Nov 20.',
+        createdDate: '2024-08-01',
+        lastUpdated: '2024-11-20'
+    },
+    {
+        id: 'dep-2',
+        projectId: 'proj-1',
+        title: 'Infrastructure Provisioning',
+        description: 'Production AWS environment setup including VPC, security groups, and RDS instances.',
+        type: 'Technical',
+        status: 'Blocked',
+        dependsOn: 'AWS Enterprise Agreement Approval',
+        dependentParty: 'IT Procurement & Cloud Ops Team',
+        requiredDate: '2024-11-30',
+        impact: 'Cannot deploy to production environment or conduct performance testing. Blocks go-live preparation.',
+        owner: 'David Kim',
+        notes: 'Procurement approval delayed due to budget review cycle. Escalated to VP level.',
+        createdDate: '2024-09-15',
+        lastUpdated: '2024-11-22'
+    },
+    {
+        id: 'dep-3',
+        projectId: 'proj-1',
+        title: 'External Security Audit',
+        description: 'Third-party security firm must complete penetration testing before production deployment.',
+        type: 'External',
+        status: 'Pending',
+        dependsOn: 'Security Audit Contract Execution',
+        dependentParty: 'CyberSec Solutions Inc.',
+        requiredDate: '2025-01-15',
+        expectedDate: '2025-01-10',
+        impact: 'Regulatory requirement for production deployment. Cannot launch without completed audit report.',
+        owner: 'Mike Chen',
+        notes: 'Contract signed. Audit scheduled for first week of January 2025.',
+        createdDate: '2024-10-01',
+        lastUpdated: '2024-11-18'
+    }
+];
+
+// Initialize Supporting Documents
+let supportingDocuments: SupportingDocument[] = [
+    {
+        id: 'doc-1',
+        projectId: 'proj-1',
+        title: 'Statement of Work - Phase 1',
+        description: 'Signed SOW for initial development phase including discovery, design, and core platform development.',
+        type: 'Contract',
+        status: 'Approved',
+        fileName: 'SOW_Phase1_v2.1_Signed.pdf',
+        fileSize: 2457600,
+        fileUrl: '/documents/proj-1/SOW_Phase1_v2.1_Signed.pdf',
+        uploadedBy: 'Jane Doe',
+        uploadedDate: '2024-01-10',
+        version: '2.1',
+        tags: ['contract', 'sow', 'phase-1'],
+        lastModified: '2024-01-10'
+    },
+    {
+        id: 'doc-2',
+        projectId: 'proj-1',
+        title: 'Technical Architecture Document',
+        description: 'Comprehensive system architecture including microservices design, data flow diagrams, and infrastructure specifications.',
+        type: 'Design',
+        status: 'Approved',
+        fileName: 'Technical_Architecture_v3.0.pdf',
+        fileSize: 5242880,
+        fileUrl: '/documents/proj-1/Technical_Architecture_v3.0.pdf',
+        uploadedBy: 'Sarah Johnson',
+        uploadedDate: '2024-03-15',
+        version: '3.0',
+        tags: ['architecture', 'technical', 'design'],
+        lastModified: '2024-04-22'
+    },
+    {
+        id: 'doc-3',
+        projectId: 'proj-1',
+        title: 'Security Compliance Report Q3 2024',
+        description: 'Quarterly security assessment and compliance status report covering PCI-DSS and SOC 2 requirements.',
+        type: 'Report',
+        status: 'Approved',
+        fileName: 'Security_Compliance_Q3_2024.pdf',
+        fileSize: 1048576,
+        fileUrl: '/documents/proj-1/Security_Compliance_Q3_2024.pdf',
+        uploadedBy: 'Mike Chen',
+        uploadedDate: '2024-10-05',
+        version: '1.0',
+        tags: ['security', 'compliance', 'q3-2024'],
+        lastModified: '2024-10-05'
+    },
+    {
+        id: 'doc-4',
+        projectId: 'proj-1',
+        title: 'Sprint Planning Notes - November 2024',
+        description: 'Meeting notes from November sprint planning including user story breakdown and velocity calculations.',
+        type: 'Meeting Notes',
+        status: 'Draft',
+        fileName: 'Sprint_Planning_Nov_2024.docx',
+        fileSize: 524288,
+        fileUrl: '/documents/proj-1/Sprint_Planning_Nov_2024.docx',
+        uploadedBy: 'Emily Rodriguez',
+        uploadedDate: '2024-11-01',
+        version: '1.0',
+        tags: ['sprint-planning', 'agile', 'november'],
+        lastModified: '2024-11-15'
+    }
+];
+
 
 const MOCK_USER: User = {
     id: '1',
@@ -884,6 +1157,239 @@ export const mockService = {
                     userFinancials = [...userFinancials, financials];
                 }
                 resolve(financials);
+            }, 300);
+        });
+    },
+
+    // Contract Management Methods
+
+    // SOW Management
+    getProjectSOWs: async (projectId: string): Promise<SOW[]> => {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve(sows.filter(s => s.projectId === projectId));
+            }, 300);
+        });
+    },
+
+    getSOW: async (id: string): Promise<SOW> => {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                const sow = sows.find(s => s.id === id);
+                if (sow) {
+                    resolve({ ...sow });
+                } else {
+                    reject(new Error('SOW not found'));
+                }
+            }, 300);
+        });
+    },
+
+    createSOW: async (sow: Omit<SOW, 'id'>): Promise<SOW> => {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                const newSOW: SOW = {
+                    ...sow,
+                    id: `sow-${Math.random().toString(36).substr(2, 9)}`
+                };
+                sows = [...sows, newSOW];
+                resolve(newSOW);
+            }, 300);
+        });
+    },
+
+    updateSOW: async (updatedSOW: SOW): Promise<SOW> => {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                sows = sows.map(s => s.id === updatedSOW.id ? updatedSOW : s);
+                resolve(updatedSOW);
+            }, 300);
+        });
+    },
+
+    deleteSOW: async (id: string): Promise<void> => {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                sows = sows.filter(s => s.id !== id);
+                // Also delete associated change requests
+                changeRequests = changeRequests.filter(cr => cr.sowId !== id);
+                resolve();
+            }, 300);
+        });
+    },
+
+    // Change Request Management
+    getSOWChangeRequests: async (sowId: string): Promise<ChangeRequest[]> => {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve(changeRequests.filter(cr => cr.sowId === sowId));
+            }, 300);
+        });
+    },
+
+    getProjectChangeRequests: async (projectId: string): Promise<ChangeRequest[]> => {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve(changeRequests.filter(cr => cr.projectId === projectId));
+            }, 300);
+        });
+    },
+
+    createChangeRequest: async (cr: Omit<ChangeRequest, 'id'>): Promise<ChangeRequest> => {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                const newCR: ChangeRequest = {
+                    ...cr,
+                    id: `cr-${Math.random().toString(36).substr(2, 9)}`
+                };
+                changeRequests = [...changeRequests, newCR];
+                resolve(newCR);
+            }, 300);
+        });
+    },
+
+    updateChangeRequest: async (updatedCR: ChangeRequest): Promise<ChangeRequest> => {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                changeRequests = changeRequests.map(cr =>
+                    cr.id === updatedCR.id ? updatedCR : cr
+                );
+                resolve(updatedCR);
+            }, 300);
+        });
+    },
+
+    deleteChangeRequest: async (id: string): Promise<void> => {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                changeRequests = changeRequests.filter(cr => cr.id !== id);
+                resolve();
+            }, 300);
+        });
+    },
+
+    // Risk Management Methods
+    getProjectRisks: async (projectId: string): Promise<Risk[]> => {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve(risks.filter(r => r.projectId === projectId));
+            }, 300);
+        });
+    },
+
+    createRisk: async (risk: Omit<Risk, 'id'>): Promise<Risk> => {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                const newRisk: Risk = {
+                    ...risk,
+                    id: `risk-${Math.random().toString(36).substr(2, 9)}`
+                };
+                risks = [...risks, newRisk];
+                resolve(newRisk);
+            }, 300);
+        });
+    },
+
+    updateRisk: async (updatedRisk: Risk): Promise<Risk> => {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                risks = risks.map(r =>
+                    r.id === updatedRisk.id ? updatedRisk : r
+                );
+                resolve(updatedRisk);
+            }, 300);
+        });
+    },
+
+    deleteRisk: async (id: string): Promise<void> => {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                risks = risks.filter(r => r.id !== id);
+                resolve();
+            }, 300);
+        });
+    },
+
+    // Dependency Management Methods
+    getProjectDependencies: async (projectId: string): Promise<Dependency[]> => {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve(dependencies.filter(d => d.projectId === projectId));
+            }, 300);
+        });
+    },
+
+    createDependency: async (dependency: Omit<Dependency, 'id'>): Promise<Dependency> => {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                const newDependency: Dependency = {
+                    ...dependency,
+                    id: `dep-${Math.random().toString(36).substr(2, 9)}`
+                };
+                dependencies = [...dependencies, newDependency];
+                resolve(newDependency);
+            }, 300);
+        });
+    },
+
+    updateDependency: async (updatedDependency: Dependency): Promise<Dependency> => {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                dependencies = dependencies.map(d =>
+                    d.id === updatedDependency.id ? updatedDependency : d
+                );
+                resolve(updatedDependency);
+            }, 300);
+        });
+    },
+
+    deleteDependency: async (id: string): Promise<void> => {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                dependencies = dependencies.filter(d => d.id !== id);
+                resolve();
+            }, 300);
+        });
+    },
+
+    // Supporting Documents Methods
+    getProjectDocuments: async (projectId: string): Promise<SupportingDocument[]> => {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve(supportingDocuments.filter(doc => doc.projectId === projectId));
+            }, 300);
+        });
+    },
+
+    uploadDocument: async (document: Omit<SupportingDocument, 'id'>): Promise<SupportingDocument> => {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                const newDocument: SupportingDocument = {
+                    ...document,
+                    id: `doc-${Math.random().toString(36).substr(2, 9)}`
+                };
+                supportingDocuments = [...supportingDocuments, newDocument];
+                resolve(newDocument);
+            }, 300);
+        });
+    },
+
+    updateDocument: async (updatedDocument: SupportingDocument): Promise<SupportingDocument> => {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                supportingDocuments = supportingDocuments.map(doc =>
+                    doc.id === updatedDocument.id ? updatedDocument : doc
+                );
+                resolve(updatedDocument);
+            }, 300);
+        });
+    },
+
+    deleteDocument: async (id: string): Promise<void> => {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                supportingDocuments = supportingDocuments.filter(doc => doc.id !== id);
+                resolve();
             }, 300);
         });
     }

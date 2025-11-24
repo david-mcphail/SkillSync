@@ -9,7 +9,7 @@ import {
     Grid,
     MenuItem
 } from '@mui/material';
-import type { Project, ProjectStatus } from '../types/models';
+import type { Project } from '../types/models';
 
 interface CreateProjectModalProps {
     open: boolean;

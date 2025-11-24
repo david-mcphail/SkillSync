@@ -104,7 +104,7 @@ const AddSkillModal = ({ open, onClose, onAdd, initialCategory }: AddSkillModalP
                 return (
                     <Grid container spacing={2} sx={{ mt: 1 }}>
                         {TAXONOMY.map((category) => (
-                            <Grid size={{ xs: 12, sm: 6 }} key={category.name}>
+                            <Grid item xs={12} sm={6} key={category.name}>
                                 <Card
                                     variant={selectedCategory?.name === category.name ? 'outlined' : 'elevation'}
                                     sx={{

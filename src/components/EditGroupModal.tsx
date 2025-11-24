@@ -14,12 +14,11 @@ import {
     Autocomplete,
     Box,
     Typography,
-    IconButton,
-    Chip
+    IconButton
 } from '@mui/material';
 import { DataGrid, type GridColDef } from '@mui/x-data-grid';
 import { Delete as DeleteIcon, Add as AddIcon } from '@mui/icons-material';
-import type { Group, User, GroupType, UserGroup } from '../types/models';
+import type { Group, User, GroupType } from '../types/models';
 
 interface EditGroupModalProps {
     open: boolean;

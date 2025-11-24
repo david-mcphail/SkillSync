@@ -39,7 +39,7 @@ const AdminProfileTab: React.FC<AdminProfileTabProps> = ({ user, onUpdate }) => 
     // Financial data state
     const [paybands, setPaybands] = useState<Payband[]>([]);
     const [rateCards, setRateCards] = useState<RateCard[]>([]);
-    const [financials, setFinancials] = useState<UserFinancials | null>(null);
+
 
     const [selectedPayband, setSelectedPayband] = useState('');
     const [selectedRateCard, setSelectedRateCard] = useState<string | 'custom'>('');
@@ -62,7 +62,7 @@ const AdminProfileTab: React.FC<AdminProfileTabProps> = ({ user, onUpdate }) => 
 
             setPaybands(paybandsData);
             setRateCards(rateCardsData);
-            setFinancials(financialsData);
+
 
             if (financialsData) {
                 setSelectedPayband(financialsData.paybandId || '');

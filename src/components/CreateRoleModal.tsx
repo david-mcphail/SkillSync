@@ -11,10 +11,9 @@ import {
     Typography,
     Autocomplete,
     Chip,
-    MenuItem,
-    IconButton
+    MenuItem
 } from '@mui/material';
-import { Delete as DeleteIcon } from '@mui/icons-material';
+
 import { TAXONOMY } from '../data/taxonomy';
 import type { ProjectRole, SkillRequirement, ProficiencyLevel } from '../types/models';
 

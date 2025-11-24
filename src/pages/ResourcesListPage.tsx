@@ -75,12 +75,8 @@ const ResourcesListPage: React.FC = () => {
     };
 
     const activeUsers = users.filter(u => u.status === 'Active' || !u.status);
-    const departmentCounts = groups
-        .filter(g => g.type === 'Department')
-        .reduce((acc, dept) => {
-            acc[dept.name] = users.filter(u => u.department === dept.name).length;
-            return acc;
-        }, {} as Record<string, number>);
+
+
 
     if (loading) {
         return (
